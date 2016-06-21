@@ -1,0 +1,10 @@
+#!/bin/sh
+for i in gost*; do 
+echo Processing $i
+cd $i
+# Experiment with preprocessing individual tiles with pgmnorm / pgmenhance / pnmnlfilt
+averager l??c???.pgm 2>/dev/null > raw.pgm
+# Experiment with post-processing with pgmenhance / pnmnlfilt
+cat raw.pgm | pgmnorm 2>/dev/null > ave.pgm &
+cd ..
+done
