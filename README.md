@@ -1,2 +1,27 @@
 # ACPUfont
-Extracting a drum printer font from a test printout
+
+Extracting a drum printer font from a low quality test printout.
+
+## Rationale
+
+There once was a Soviet drum printer (ACPU-128, standing for Алфавитно-Цифровое Печатающее Устройство, Alphabetic-numeric printing unit, 128 characters wide)  with the [GOST 10859](http://en.wikipedia.org/wiki/GOST_10859) character set, excluding a few characters with codes higher than 0137, and there is a 200 dpi scan of a [one-page sample of its diagonal test](http://mailcom.com/besm6/ACPU-128.jpg).
+As you can see, the paper was a little crumpled, the ribbon hasn't been re-inked for quite a while, and the printing mechanism causes a substantial dot gain at the top of the glyphs.
+
+I've decided to attempt to enhance the glyphs using the fact that each of them is repeated many times.
+
+## Segmentation
+
+The first stage is segmenting the image into individual glyphs.  It is known that there were 72 lines per page of the standard (1 ft) fanfold paper; therefore the font size is 12 pt (~33 px in 200 dpi). The pitch is ostensibly 16 = 7.5 pt = ~21 px.
+
+The program splitter.cc looks for mean centers of glyphs vertically and horizontally, accounts for some downward drift toward the right side (either a scanning artifact or a consequence of each line being struck with 4 I/O instructions per character), and for the fact that the characters are top-heavy due to dot gain. The result is [here](http://mailcom.com/besm6/acpu/tiles.zip). 
+
+## Averaging 
+
+The program averager.cc takes a list of files representing samples of a single character, correlates them, and outputs the correlated result. 
+
+## Implementation details
+
+I didn't bother with the NetPBM library; reading and writing of PGM files (the only ones I care about) is done manually.
+
+
+
